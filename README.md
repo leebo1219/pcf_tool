@@ -3,7 +3,7 @@ It's to generate PCF(Potatso Config File) to import the version 2 of Potatso
 本工具用于生成Potatso 2中的PCF（Potatso Config File）配置文件，由pcf_tool.py、PROXY.txt、DIRECT.txt、REJECT.txt组成。
 ## 文件介绍
 ### 主程序
-pcf_tool.py，用于生成.pcf文件，Potatso 2
+pcf_tool.py，用于生成.pcf文件，代入Potatso 2中。
 ### 规则文件
 PROXY.txt，用于存放需要经过代理服务器的域名，给生成PCF配置文件使用；
 
