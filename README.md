@@ -1,5 +1,6 @@
 # PCF_tool
 It's to generate PCF(Potatso Config File) to import the version 2 of Potatso
+
 本工具用于生成Potatso 2中的PCF（Potatso Config File）配置文件，由pcf_tool.py、PROXY.txt、DIRECT.txt、REJECT.txt组成。
 ## 文件介绍
 ### 主程序
