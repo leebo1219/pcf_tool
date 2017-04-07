@@ -6,7 +6,9 @@ It's to generate PCF(Potatso Config File) to import the version 2 of Potatso
 pcf_tool.py，用于生成.pcf文件，Potatso 2
 ### 规则文件
 PROXY.txt，用于存放需要经过代理服务器的域名，给生成PCF配置文件使用；
+
 DIRECT.txt，用于存放需要不经过代理服务器的域名，给生成PCF配置文件使用；
+
 REJECT.txt，用于存放拒绝连接的域名，给生成PCF配置文件使用，一般用于屏蔽广告。
 ## 使用方法
 ### 写入规则文件
