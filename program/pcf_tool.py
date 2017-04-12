@@ -168,7 +168,7 @@ def config_socks5():
 		socks_config.extend([config_proxy_type,config_proxy_host,config_proxy_port,config_proxy_confirm_method,config_proxy_user,config_proxy_password,config_proxy_remark])
 	return socks_config
 	
-config_Header="name=\"一名法学生的配置文档\"\nauthor=\"Lei Lee\"\nemail=\"a79865863@gmail.com\"\nwebsite=\"http:\\sharex.win:878\"\ndescription=\"一名法学生的代理配置\"\n\n"
+config_Header="name = \"一名法学生的配置文档\"\nemail = \"a79865863@gmail.com\"\nwebsite = \"http://sharex.win:878\"\ndescription = \"一名法学生的代理配置\"\n\n"
 config_proxy_number=raw_input("你需要设置的代理数量（如1个，就输入1）：")
 config_proxy_array = [] #用以存放代理的配置
 for num in range(0,int(config_proxy_number)):
@@ -196,39 +196,57 @@ proxy_content="#代理（Proxy）\n"
 #循环代理配置
 for index in range(len(config_proxy_array)):
 	if config_proxy_array[index][0] == "SHADOWSOCKS":
-		proxy_content="".join([proxy_content,"[PROXY.sharex",str(index),"]\ntype = \"",config_proxy_array[index][0],"\"\nhost = \"",config_proxy_array[index][1],"\"\nport = \"",config_proxy_array[index][2],"\"\nencryption = \"",config_proxy_array[index][3],"\"\npassword = \"",config_proxy_array[index][4],"\"\nremark = \"",config_proxy_array[index][5],"\"\n\n"])
+		proxy_content="".join([proxy_content,"[PROXY.sharex",str(index),"]\ntype = \"",config_proxy_array[index][0],"\"\nhost = \"",config_proxy_array[index][1],"\"\nport = ",config_proxy_array[index][2],"\nencryption = \"",config_proxy_array[index][3],"\"\npassword = \"",config_proxy_array[index][4],"\"\nremark = \"",config_proxy_array[index][5],"\"\n\n"])
 		#proxy_content=config_proxy_array[index][1]+config_proxy_array[index][2]+config_proxy_array[index][3]+config_proxy_array[index][4]
 	elif config_proxy_array[index][0] == "SHADOWSOCKSR":
-		proxy_content="".join([proxy_content,"[PROXY.sharex",str(index),"]\ntype = \"",config_proxy_array[index][0],"\"\nhost = \"",config_proxy_array[index][1],"\"\nport = \"",config_proxy_array[index][2],"\"\nencryption = \"",config_proxy_array[index][3],"\"\npassword = \"",config_proxy_array[index][4],"\"\nprotocol = \"",config_proxy_array[index][5],"\"\nprotocolParam = \"",config_proxy_array[index][6],"\"\nobfs = \"",config_proxy_array[index][7],"\"\nobfsParam = \"",config_proxy_array[index][8],"\"\nremark = \"",config_proxy_array[index][9],"\"\n\n"])
+		proxy_content="".join([proxy_content,"[PROXY.sharex",str(index),"]\ntype = \"",config_proxy_array[index][0],"\"\nhost = \"",config_proxy_array[index][1],"\"\nport = ",config_proxy_array[index][2],"\nencryption = \"",config_proxy_array[index][3],"\"\npassword = \"",config_proxy_array[index][4],"\"\nprotocol = \"",config_proxy_array[index][5],"\"\nprotocolParam = \"",config_proxy_array[index][6],"\"\nobfs = \"",config_proxy_array[index][7],"\"\nobfsParam = \"",config_proxy_array[index][8],"\"\nremark = \"",config_proxy_array[index][9],"\"\n\n"])
 	elif config_proxy_array[index][0] == "SOCKS5":
 		if config_proxy_array[index][3] == "NONE":
-		 	proxy_content="".join([proxy_content,"[PROXY.sharex",str(index),"]\ntype = \"",config_proxy_array[index][0],"\"\nhost = \"",config_proxy_array[index][1],"\"\nport = \"",config_proxy_array[index][2],"\"\nremark = \"",config_proxy_array[index][4],"\"\n\n"])
+		 	proxy_content="".join([proxy_content,"[PROXY.sharex",str(index),"]\ntype = \"",config_proxy_array[index][0],"\"\nhost = \"",config_proxy_array[index][1],"\"\nport = ",config_proxy_array[index][2],"\nremark = \"",config_proxy_array[index][4],"\"\n\n"])
 		elif config_proxy_array[index][3] == "PASSWORD":
-			proxy_content="".join([proxy_content,"[PROXY.sharex",str(index),"]\ntype = \"",config_proxy_array[index][0],"\"\nhost = \"",config_proxy_array[index][1],"\"\nport = \"",config_proxy_array[index][2],"\"\nuser = \"",config_proxy_array[index][4],"\"\npassword = \"",config_proxy_array[index][5],"\"\nremark = \"",config_proxy_array[index][6],"\"\n\n"])
+			proxy_content="".join([proxy_content,"[PROXY.sharex",str(index),"]\ntype = \"",config_proxy_array[index][0],"\"\nhost = \"",config_proxy_array[index][1],"\"\nport = ",config_proxy_array[index][2],"\nuser = \"",config_proxy_array[index][4],"\"\npassword = \"",config_proxy_array[index][5],"\"\nremark = \"",config_proxy_array[index][6],"\"\n\n"])
 #循环经过代理的规则
-proxy_rules="\n\n#规则集\n[RULESET.sharexproxy]\nname = \"代理路线\"\nrules = [\n"
+proxy_rules="\n\n# 规则集\n[RULESET.sharexproxy]\nname = \"代理路线\"\nrules = [\n"
 for proxy_rule in proxy_rules_file:
 	proxy_rule=re.sub(r'[\n|,]','',proxy_rule)
-	proxy_rules="".join([proxy_rules,"\"DOMAIN-MATCH, ",proxy_rule,", PROXY\",\n"])
+	if re.match(r'\|\||!|----|\/\^|\[',proxy_rule,re.S|re.M):
+		continue
+	elif proxy_rule == "":
+		continue
+	else:
+		proxy_rule =  re.sub(r'@@|\?|\\','',proxy_rule)
+		proxy_rules="".join([proxy_rules,"\"DOMAIN-MATCH, ",proxy_rule,", PROXY\",\n"])
 proxy_rules=re.sub(r',$','',proxy_rules)
 proxy_rules="".join([proxy_rules,"]\n\n"])
 
-direct_rules="#规则集\n[RULESET.sharexdirect]\nname = \"本地网络\"\nrules = [\n"
+direct_rules="# 规则集\n[RULESET.sharexdirect]\nname = \"本地网络\"\nrules = [\n"
 for direct_rule in direct_rules_file:
 	direct_rule=re.sub(r'[\n|,]','',direct_rule)
-	direct_rules="".join([direct_rules,"\"DOMAIN-MATCH, ",direct_rule,", DIRECT\",\n"])
+	if re.match(r'\|\||!|----|\/\^|\[',direct_rule,re.S|re.M):
+		continue
+	elif direct_rule == "":
+		continue
+	else:
+		direct_rule =  re.sub(r'@@|\?|\\','',direct_rule)
+		direct_rules="".join([direct_rules,"\"DOMAIN-MATCH, ",direct_rule,", DIRECT\",\n"])
 direct_rules=re.sub(r',$','',direct_rules)
 direct_rules="".join([direct_rules,"]\n\n"])
 
-reject_rules="#规则集\n[RULESET.sharexreject]\nname = \"拒绝链接\"\nrules = [\n"
+reject_rules="# 规则集\n[RULESET.sharexreject]\nname = \"拒绝链接\"\nrules = [\n"
 for reject_rule in reject_rules_file:
 	reject_rule=re.sub(r'[\n|,]','',reject_rule)
-	reject_rules="".join([reject_rules,"\"DOMAIN-MATCH, ",reject_rule,", REJECT\",\n"])
+	if re.match(r'\|\||!|----|\/\^|\[',reject_rule,re.S|re.M):
+		continue
+	elif reject_rule == "":
+		continue
+	else:
+		reject_rule =  re.sub(r'@@|\?|\\','',reject_rule)
+		reject_rules="".join([reject_rules,"\"DOMAIN-MATCH, ",reject_rule,", REJECT\",\n"])
 reject_rules=re.sub(r',$','',reject_rules)
 reject_rules="".join([reject_rules,"]\n\n"])
 
 #设置用户默认配置
-default_config="".join(["\n\n# 用户配置（Profile）\n[PROFILE.sharex]\nname = \"Sharex代理\"\ndns = []\ndefault = \"PROXY\"\nproxy = \"share0\"\nrulesets = [\n\"sharexdirect\",\n\"sharexproxy\",\n\"sharexreject\"\n]\n\n\n\n"])
+default_config="".join(["\n\n# 用户配置（Profile）\n[PROFILE.sharex]\nname = \"Sharex代理\"\ndns = [\"8.8.8.8\"]\ndefault = \"PROXY\"\nproxy = \"share0\"\nrulesets = [\n\"sharexdirect\",\n\"sharexproxy\",\n\"sharexreject\"\n]\n\n\n\n"])
 full_content="".join([header_content,default_config,proxy_content,proxy_rules,direct_rules,reject_rules])
 generate_config_file.write(full_content)
 generate_config_file.close()
